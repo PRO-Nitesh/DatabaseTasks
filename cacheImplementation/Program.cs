@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen();
 //adding repository services
 #region
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 #endregion
 
 var app = builder.Build();

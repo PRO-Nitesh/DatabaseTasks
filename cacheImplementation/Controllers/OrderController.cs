@@ -1,5 +1,6 @@
 ﻿using cacheImplementation.Data;
 using cacheImplementation.Models;
+using cacheImplementation.Repository.InterfaceRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,65 +11,108 @@ namespace cacheImplementation.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly combineContext _context;
+        //private readonly combineContext _context;
 
-        public OrderController(combineContext context)
+        //public OrderController(combineContext context)
+        //{
+        //    _context=context;
+        //}
+
+        ////creating a GET method
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        //{
+        //    //return await _context.Orders.ToListAsync();
+
+        //    var orderes = await _context.Orders.ToListAsync();
+        //    if(orderes == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(orderes); 
+        //}
+
+        ////creating a post method
+        //[HttpPost]
+        //public async Task<ActionResult<Order>> PostOrders(Order order)
+        //{
+
+        //    _context.Orders.Add(order);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtRoute("GetOrder", new { id = order.order_id }, order);
+        //}
+
+
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Order>> GetOrder(Guid id)
+        //{
+        //    var order = await _context.Orders.FindAsync(id);
+
+        //    if (order == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return order;
+        //}
+
+        //// DELETE: api/Orders/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteOrder(Guid id)
+        //{
+        //    var order = await _context.Orders.FindAsync(id);
+        //    if (order == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Orders.Remove(order);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
+        private readonly IOrderRepository _orderRepository;
+
+        public OrderController(IOrderRepository orderRepository)
         {
-            _context=context;
+            _orderRepository = orderRepository;
         }
 
-        //creating a GET method
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            //return await _context.Orders.ToListAsync();
-
-            var orderes = await _context.Orders.ToListAsync();
-            if(orderes == null)
+            var orders = await _orderRepository.GetOrders();
+            if (orders == null)
             {
                 return NotFound();
             }
-            return Ok(orderes); 
+            return Ok(orders);
         }
 
-        //creating a post method
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrders(Order order)
+        public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtRoute("GetOrder", new { id = order.order_id }, order);
+            var createdOrder = await _orderRepository.CreateOrder(order);
+            return CreatedAtRoute("GetOrder", new { id = createdOrder.order_id }, createdOrder);
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
-
+            var order = await _orderRepository.GetOrder(id);
             if (order == null)
             {
                 return NotFound();
             }
-
-            return order;
+            return Ok(order);
         }
 
-        // DELETE: api/Orders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-
+            await _orderRepository.DeleteOrder(id);
             return NoContent();
         }
 
