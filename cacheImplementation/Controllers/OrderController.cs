@@ -4,6 +4,7 @@ using cacheImplementation.Repository.InterfaceRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace cacheImplementation.Controllers
 {
@@ -11,73 +12,13 @@ namespace cacheImplementation.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        //private readonly combineContext _context;
-
-        //public OrderController(combineContext context)
-        //{
-        //    _context=context;
-        //}
-
-        ////creating a GET method
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
-        //{
-        //    //return await _context.Orders.ToListAsync();
-
-        //    var orderes = await _context.Orders.ToListAsync();
-        //    if(orderes == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(orderes); 
-        //}
-
-        ////creating a post method
-        //[HttpPost]
-        //public async Task<ActionResult<Order>> PostOrders(Order order)
-        //{
-
-        //    _context.Orders.Add(order);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtRoute("GetOrder", new { id = order.order_id }, order);
-        //}
-
-
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Order>> GetOrder(Guid id)
-        //{
-        //    var order = await _context.Orders.FindAsync(id);
-
-        //    if (order == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return order;
-        //}
-
-        //// DELETE: api/Orders/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrder(Guid id)
-        //{
-        //    var order = await _context.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Orders.Remove(order);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
         private readonly IOrderRepository _orderRepository;
+        private readonly IMemoryCache _cache;
 
-        public OrderController(IOrderRepository orderRepository)
+        public OrderController(IOrderRepository orderRepository, IMemoryCache cache)
         {
             _orderRepository = orderRepository;
+            _cache = cache;
         }
 
         [HttpGet]
@@ -114,6 +55,38 @@ namespace cacheImplementation.Controllers
         {
             await _orderRepository.DeleteOrder(id);
             return NoContent();
+        }
+
+
+        //[HttpGet("MostSoldProduct")]
+        //public async Task<ActionResult<Product>> GetMostSoldProduct()
+        //{
+        //    var product = await _orderRepository.GetMostSoldProduct();
+        //    if (product == null)
+        //    {
+        //        return NotFound(); // No orders found
+        //    }
+        //    return product;
+        //}
+
+        [HttpGet("MostSoldProduct")]
+        public async Task<ActionResult<Product>> GetMostSoldProduct()
+        {
+            const string cacheKey = "MostSoldProduct";
+
+            var product = await _cache.GetOrCreateAsync(cacheKey, entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10); 
+
+                return _orderRepository.GetMostSoldProduct();
+            });
+
+            if (product == null)
+            {
+                return NotFound(); 
+            }
+
+            return product;
         }
 
     }

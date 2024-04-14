@@ -8,5 +8,6 @@ namespace cacheImplementation.Repository.InterfaceRepository
         Task<Order> GetOrder(Guid id);
         Task<Order> CreateOrder(Order order);
         Task DeleteOrder(Guid id);
+        Task<Product> GetMostSoldProduct();
     }
 }

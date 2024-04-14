@@ -34,7 +34,11 @@ builder.Services.AddSwaggerGen();
 #region
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 #endregion
+
+//adding cache service
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

@@ -41,5 +41,16 @@ namespace cacheImplementation.Repository
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<Product> GetMostSoldProduct()
+        {
+              var mostSoldProductId = await _context.Orders
+              .GroupBy(o => o.product_id)
+              .OrderByDescending(g => g.Count())
+              .Select(g => g.Key)
+              .FirstOrDefaultAsync();
+
+            return await _context.Products.FindAsync(mostSoldProductId);
+        }
     }
 }
