@@ -36,7 +36,7 @@ namespace cacheImplementation.Controllers
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             var createdOrder = await _orderRepository.CreateOrder(order);
-            return CreatedAtRoute("GetOrder", new { id = createdOrder.order_id }, createdOrder);
+            return Ok(CreatedAtRoute("GetOrder", new { id = createdOrder.order_id }, createdOrder));
         }
 
         [HttpGet("{id}")]

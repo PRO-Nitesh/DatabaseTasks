@@ -1,12 +1,14 @@
 ﻿using cacheImplementation.Data;
 using cacheImplementation.Models;
 using cacheImplementation.Repository.InterfaceRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace cacheImplementation.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase

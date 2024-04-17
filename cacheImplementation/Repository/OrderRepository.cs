@@ -27,7 +27,12 @@ namespace cacheImplementation.Repository
         public async Task<Order> CreateOrder(Order order)
         {
             order.order_id = Guid.NewGuid();
+            order.Customer = null;
+            order.Product = null;
             _context.Orders.Add(order);
+            var gotorder = await _context.Products.FindAsync(order.product_id);
+            gotorder.quantity -= order.quantity;
+
             await _context.SaveChangesAsync();
             return order;
         }

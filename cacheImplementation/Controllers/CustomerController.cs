@@ -1,15 +1,18 @@
 ﻿using cacheImplementation.Data;
 using cacheImplementation.Models;
 using cacheImplementation.Repository.InterfaceRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using cacheImplementation.Filters;
 
 namespace cacheImplementation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(AuthorizationFilter))]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
@@ -19,7 +22,9 @@ namespace cacheImplementation.Controllers
             _customerRepository = customerRepository;
         }
 
+        [Authorize]
         [HttpGet("Details")]
+
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
             var customers = await _customerRepository.GetCustomers();
@@ -52,3 +57,4 @@ namespace cacheImplementation.Controllers
         }
     }
 }
+

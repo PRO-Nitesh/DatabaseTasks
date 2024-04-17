@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cacheImplementation", "cacheImplementation\cacheImplementation.csproj", "{0825EE3F-32F6-48AE-8416-D1C666A3A342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cacheImplementation", "cacheImplementation\cacheImplementation.csproj", "{0825EE3F-32F6-48AE-8416-D1C666A3A342}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopAPI.Test", "OnlineShopAPI.Test\OnlineShopAPI.Test.csproj", "{CA70171F-BD74-4CA2-98C8-F91A50DD0802}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0825EE3F-32F6-48AE-8416-D1C666A3A342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0825EE3F-32F6-48AE-8416-D1C666A3A342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0825EE3F-32F6-48AE-8416-D1C666A3A342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA70171F-BD74-4CA2-98C8-F91A50DD0802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA70171F-BD74-4CA2-98C8-F91A50DD0802}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA70171F-BD74-4CA2-98C8-F91A50DD0802}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA70171F-BD74-4CA2-98C8-F91A50DD0802}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
