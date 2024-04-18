@@ -18,8 +18,8 @@ namespace OnlineShopAPI.Test
             var customer = new Customer
             {
                 customer_id = customerId,
-                customer_name = "John Doe",
-                email = "johndoe@example.com",
+                customer_name = "Nitesh Kumar",
+                email = "nitesh@gmail.com",
                 phone = "1234567890",
                 gender = "Male",
                 created_at = DateTime.Now,
@@ -66,8 +66,8 @@ namespace OnlineShopAPI.Test
             var mockRepository = new Mock<ICustomerRepository>();
             var customer = new Customer
             {
-                customer_name = "John Doe",
-                email = "john.doe@example.com",
+                customer_name = "Nitesh Kumar",
+                email = "nitesh@gmail.com",
                 phone = "1234567890",
                 gender = "Male"
             };
@@ -82,5 +82,26 @@ namespace OnlineShopAPI.Test
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             Assert.Equal(customer, createdAtActionResult.Value);
         }
-    }
+
+
+        [Fact]
+        public async Task DeleteCustomer_ReturnsNoContent_WhenCustomerFound()
+        {
+            // Arrange
+            var customerId = Guid.NewGuid();
+            var mockRepository = new Mock<ICustomerRepository>();
+            mockRepository.Setup(r => r.DeleteCustomer(customerId))
+              .Returns(Task.CompletedTask);
+
+            var controller = new CustomerController(mockRepository.Object);
+
+            // Act
+            var result = await controller.DeleteCustomer(customerId);
+
+            // Assert
+            Assert.IsType<NoContentResult>(result);
+            mockRepository.Verify(r => r.DeleteCustomer(customerId), Times.Once);
+        }
+
+       }
 }
